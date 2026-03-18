@@ -1,0 +1,12 @@
+//Tasks
+http://localhost:8080/api/tasks
+{
+  "userId": 1,
+  "title": "Design Homepage",
+  "description": "Create UI for homepage screen",
+  "dueDate": "2025-04-10",
+  "priority": "HIGH",
+  "status": "TODO"
+}
+
+//user
