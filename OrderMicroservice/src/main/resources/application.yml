@@ -1,0 +1,47 @@
+server:
+  port: 8082
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: order-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.sprBoot.user.dao"
+        spring.json.type.mapping: userEvent:com.sprBoot.user.dao.UserEvent
+  datasource:
+    url: jdbc:mysql://localhost:3306/sys
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+spring.json.type.mapping: alias:fully.qualified.ClassName
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+    instances:
+      orderService:
+        base-config: default
